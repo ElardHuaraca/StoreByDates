@@ -14,7 +14,7 @@ const ROUTES = [
 
 export default function Header() {
     return (
-        <div className="w-full min-h-[30px] p-6 shadow-lg">
+        <div className="w-full min-h-[30px] p-4 shadow-lg">
             <div className="flex">
                 {ROUTES.map(route => {
                     return <Link href={route.path} key={route.path}
