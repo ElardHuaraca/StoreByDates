@@ -25,7 +25,7 @@ export default async function Stores() {
                         return <tr key={store.id}>
                             <td className="border-b-2 border-l-2 border-emerald-600 py-2">{store.name}</td>
                             <td className="border-b-2 border-x-2 border-emerald-600 py-2">
-                                <DetailStores id="" />
+                                <DetailStores id={`${store.id}`} />
                             </td>
                         </tr>
                     }) || <tr><td colSpan={2} className="border-b-2 border-x-2 border-emerald-600 py-2">No se ha registrado ningun STORE ONCE</td></tr>
