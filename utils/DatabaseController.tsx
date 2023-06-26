@@ -12,8 +12,13 @@ const connection = MYSQL.createPool({
 const connect = connection.promise()
 
 export async function AllStores() {
-
     const [results, _] = await connect.execute('SELECT id, name FROM store')
+
+    return results
+}
+
+export async function StoreById(id: number) {
+    const [results, _] = await connect.execute('SELECT id, name FROM store WHERE id = ? JOIN type_store ON store.type_id = type_store.id', [id])
 
     return results
 }
