@@ -1,23 +1,19 @@
 import MYSQL from 'mysql2'
 
-const connection = MYSQL.createConnection({
+const connection = MYSQL.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
+    database: process.env.DB_NAME,
+    waitForConnections: true,
+    connectionLimit: 10,
 })
 
+const connect = connection.promise()
+
 export async function AllStores() {
-    /* return results */
-    return new Promise<Store[]>((resolve, reject) => {
-        connection.connect((err) => {
-            if (err) reject(err)
 
-            connection.query('SELECT * FROM stores', (err, results, fields) => {
-                if (err) reject(err)
-                resolve(results as Store[])
-            })
+    const [results, _] = await connect.query('SELECT * FROM stores')
 
-        })
-    })
+    return results
 }
