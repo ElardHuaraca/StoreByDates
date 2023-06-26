@@ -5,7 +5,7 @@ export async function GET() {
     /* avoid cache */
     const stores = await AllStores() as Store[]
 
-    if (stores.length === 0) return NextResponse.json(null)
+    if (stores.length === 0) return NextResponse.json({}, { status: 404 })
 
     return NextResponse.json(stores)
 }
