@@ -1,3 +1,5 @@
+import { DetailStores } from "./DetailStores"
+
 const fetchStores = () => fetch(process.env.API_ROUTE_BASE + "/stores", {
     cache: 'no-store'
 }).then(res => {
@@ -23,12 +25,7 @@ export default async function Stores() {
                         return <tr key={store.id}>
                             <td className="border-b-2 border-l-2 border-emerald-600 py-2">{store.name}</td>
                             <td className="border-b-2 border-x-2 border-emerald-600 py-2">
-                                <details>
-                                    <summary className="cursor-pointer">
-                                        Mostrar Stores
-                                    </summary>
-                                    {store.id}
-                                </details>
+                                <DetailStores id="" />
                             </td>
                         </tr>
                     }) || <tr><td colSpan={2} className="border-b-2 border-x-2 border-emerald-600 py-2">No se ha registrado ningun STORE ONCE</td></tr>
