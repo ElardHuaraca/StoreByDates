@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from "react"
-import { fetchStoresById } from "./FetchStoreCatalyst"
+import { fetchStoresCatalystById } from "./FetchStoreCatalyst"
 
 export function DetailStores({ id }: { id: string }) {
     const [fetchState, setFetchState] = useState<string | null>(null)
@@ -10,7 +10,7 @@ export function DetailStores({ id }: { id: string }) {
 
     const fetchDetails = async () => {
         if (!isLoading) return
-        const result = await fetchStoresById(id)
+        const result = await fetchStoresCatalystById(id)
         setFetchState(result)
         setLoading(false)
     }

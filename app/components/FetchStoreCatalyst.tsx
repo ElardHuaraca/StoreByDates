@@ -12,7 +12,7 @@ const STRUCTURES = [
 
 /* https://10.0.75.57/pml/login/authenticatewithobject
  */
-export async function fetchStoresById(id: string) {
+export async function fetchStoresCatalystById(id: string) {
 
     const api = () => {
 
