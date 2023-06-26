@@ -7,6 +7,7 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata = {
   title: 'Inicio',
   description: 'Generar reporte por store y fecha',
+  icons: 'favicon.ico'
 }
 
 export default function RootLayout({
