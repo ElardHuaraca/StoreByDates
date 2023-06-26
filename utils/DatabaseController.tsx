@@ -13,7 +13,7 @@ const connect = connection.promise()
 
 export async function AllStores() {
 
-    const [results, _] = await connect.query('SELECT * FROM stores')
+    const [results, _] = await connect.execute('SELECT id, name FROM stores')
 
     return results
 }
