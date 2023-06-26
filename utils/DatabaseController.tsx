@@ -18,7 +18,7 @@ export async function AllStores() {
 }
 
 export async function StoreById(id: number) {
-    const [results, _] = await connect.execute('SELECT id, name FROM store WHERE id = ? JOIN type_store ON store.type_id = type_store.id', [id])
+    const [results, _] = await connect.execute('SELECT ip,type_name FROM store LEFT JOIN type_store ON store.type_id = type_store.id WHERE store.id = ? ', [id])
 
     return results
 }
