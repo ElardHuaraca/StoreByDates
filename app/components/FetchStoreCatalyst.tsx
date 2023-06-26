@@ -10,14 +10,17 @@ const STRUCTURES = [
     }
 ]
 
+const fetchStoreDetails = async (id: string) => {
+    const response = await fetch(process.env.API_ROUTE_BASE + `/stores/${id}`)
+    return response.json()
+}
+
 /* https://10.0.75.57/pml/login/authenticatewithobject
  */
 export async function fetchStoresCatalystById(id: string) {
+    const details = await fetchStoreDetails(id) as DetailStore
 
-    const api = () => {
+    if (Object.keys(details).length === 0) return null
 
-    }
-    return new Promise<string>(async (resolve, _) => {
-        setTimeout(() => resolve('response'), 5000)
-    })
+    return details
 }
