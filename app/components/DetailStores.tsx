@@ -7,7 +7,9 @@ export function DetailStores({ id }: { id: string }) {
     const [fetchState, setFetchState] = useState<string | null>(null)
     const [isLoading, setLoading] = useState(true)
 
+
     const fetchDetails = async () => {
+        if (!isLoading) return
         const result = await fetchStoresById(id)
         setFetchState(result)
         setLoading(false)
