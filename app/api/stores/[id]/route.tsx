@@ -8,5 +8,5 @@ export async function GET(request: Request, { params }: { params: { id: string }
 
     if (store.length === 0) return NextResponse.json({}, { status: 404 })
 
-    return NextResponse.json(store);
+    return NextResponse.json(store[0]);
 }
