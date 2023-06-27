@@ -1,4 +1,4 @@
-import { AllStores } from "@/utils/DatabaseController";
+import { AllStores } from "@/helpers/DatabaseController";
 import { NextResponse } from "next/server";
 
 export async function GET() {
