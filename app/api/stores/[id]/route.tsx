@@ -1,4 +1,4 @@
-import { StoreById } from "@/utils/DatabaseController";
+import { StoreById } from "@/helpers/DatabaseController";
 import { NextApiRequest } from "next";
 import { NextResponse } from "next/server";
 
