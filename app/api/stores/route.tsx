@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
     /* avoid cache */
-    const stores = await AllStores() as StoreModel[]
+    const stores = await AllStores() as IStoreModel[]
 
     if (stores.length === 0) return NextResponse.json({}, { status: 404 })
 

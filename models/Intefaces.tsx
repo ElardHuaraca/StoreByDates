@@ -1,21 +1,21 @@
-interface StoreModel {
+interface IStoreModel {
     id: number
     name: string
 }
 
-interface StoreEntity {
+interface IStoreEntity {
     id: number
     name: string
     ip: string
     type_id: number
 }
 
-interface Type_Store{
+interface IType_Store {
     id: number
     name: string
 }
 
-interface DetailStoreModel {
+interface IDetailStoreModel {
     ip: string,
     type_name: string
 }
