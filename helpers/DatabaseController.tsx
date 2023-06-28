@@ -14,7 +14,7 @@ const connect = connection.promise()
 
 export async function InitDatabaseAndModels() {
     await connect.execute(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME}`)
-    await sequelize.sync({ alter: true })
+    await sequelize.sync()
     await StoreSequelize.findAll()
     await TypeStoreSequelize.findAll()
 
