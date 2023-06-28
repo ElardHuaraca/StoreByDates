@@ -1,5 +1,5 @@
 interface IStoreModel {
-    id: number
+    id: string
     name: string
 }
 
