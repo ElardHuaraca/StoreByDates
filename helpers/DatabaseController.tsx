@@ -1,15 +1,25 @@
 import MYSQL from 'mysql2'
+import { Sequelize } from 'sequelize'
 
-const connection = MYSQL.createPool({
+const { host, username, password, database } = {
     host: process.env.DB_HOST,
-    user: process.env.DB_USER,
+    username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
+}
+
+const connection = MYSQL.createPool({
+    host: host,
+    user: username,
+    password: password,
+    database: database,
     waitForConnections: true,
     connectionLimit: 10,
 })
 
 const connect = connection.promise()
+
+export const sequelize = new Sequelize(database!, username!, password, { dialect: 'mysql' })
 
 export async function AllStores() {
     const [results, _] = await connect.execute('SELECT id, name FROM store')
