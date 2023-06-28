@@ -19,7 +19,12 @@ const connection = MYSQL.createPool({
 
 const connect = connection.promise()
 
-export const sequelize = new Sequelize(database!, username!, password, { dialect: 'mysql' })
+export const sequelize = new Sequelize(database!, username!, password, { dialect: 'mysql', host: host })
+
+export async function InitDatabaseAndModels() {
+    await connect.execute('CREATE DATABASE IF NOT EXISTS ' + database)
+    await sequelize.sync({ alter: true })
+}
 
 export async function AllStores() {
     const [results, _] = await connect.execute('SELECT id, name FROM store')
