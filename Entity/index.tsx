@@ -5,8 +5,8 @@ TypeStoreSequelize.hasMany(StoreSequelize, {
     foreignKey: 'type_id',
 })
 
-StoreSequelize.belongsTo(TypeStoreSequelize)
-
-
+StoreSequelize.belongsTo(TypeStoreSequelize, {
+    foreignKey: 'type_id',
+})
 
 export { StoreSequelize, TypeStoreSequelize }
