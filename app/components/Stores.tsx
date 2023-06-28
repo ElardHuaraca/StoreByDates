@@ -3,13 +3,13 @@ import { DetailStores } from "./DetailStores"
 const fetchStores = () => fetch(process.env.API_ROUTE_BASE + "/stores", {
     cache: 'no-store'
 }).then(res => {
-    if (!res.ok) throw new Error(res.statusText)
-    return res.json()
+    if (res.ok) return res.json()
+
 }).catch(err => { console.error(err) })
 
 export default async function Stores() {
 
-    const stores: IStoreEntity[] = await fetchStores()
+    const stores: IStoreModel[] = await fetchStores()
 
     return (
         <table className="table-auto border-separate w-full text-center border-spacing-0">
