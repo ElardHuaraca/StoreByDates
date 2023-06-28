@@ -1,35 +1,34 @@
+import { StoreSequelize, TypeStoreSequelize } from '@/Entity'
+import { sequelize } from '@/Entity/SequelizeDB'
 import MYSQL from 'mysql2'
-import { Sequelize } from 'sequelize'
-
-const { host, username, password, database } = {
-    host: process.env.DB_HOST,
-    username: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-}
 
 const connection = MYSQL.createPool({
-    host: host,
-    user: username,
-    password: password,
-    database: database,
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
     waitForConnections: true,
     connectionLimit: 10,
 })
 
 const connect = connection.promise()
 
-export const sequelize = new Sequelize(database!, username!, password, { dialect: 'mysql', host: host })
-
 export async function InitDatabaseAndModels() {
-    await connect.execute('CREATE DATABASE IF NOT EXISTS ' + database)
+    await connect.execute(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME}`)
     await sequelize.sync({ alter: true })
+    await StoreSequelize.findAll()
+    await TypeStoreSequelize.findAll()
+
 }
 
 export async function AllStores() {
-    const [results, _] = await connect.execute('SELECT id, name FROM store')
-
-    return results
+    const results = await StoreSequelize.findAll()
+    return results.map(res => {
+        const data: IStoreModel = {
+            id: res.id,
+            name: res.name,
+        }
+        return data
+    })
 }
 
 export async function StoreById(id: number) {
