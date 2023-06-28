@@ -9,7 +9,7 @@ const fetchStores = () => fetch(process.env.API_ROUTE_BASE + "/stores", {
 
 export default async function Stores() {
 
-    const stores: Store[] = await fetchStores()
+    const stores: IStoreEntity[] = await fetchStores()
 
     return (
         <table className="table-auto border-separate w-full text-center border-spacing-0">
@@ -21,7 +21,7 @@ export default async function Stores() {
             </thead>
             <tbody>
                 {
-                    stores?.map((store: Store) => {
+                    stores?.map((store) => {
                         return <tr key={store.id}>
                             <td className="border-b-2 border-l-2 border-emerald-600 py-2">{store.name}</td>
                             <td className="border-b-2 border-x-2 border-emerald-600 py-2">
