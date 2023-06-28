@@ -1,15 +1,42 @@
-import { sequelize } from "@/helpers/DatabaseController";
 import { Optional, Model, DataTypes } from 'sequelize'
-import { TypeStoreSequelize } from "./TypeStore";
+import { sequelize } from './SequelizeDB';
 
 interface IStoreBuildAttributes extends Optional<IStoreEntity, 'id'> { }
-interface IStoreInstance extends Model<IStoreEntity, IStoreBuildAttributes>, IStoreEntity {
-    createdAt?: Date
-    updatedAt?: Date
 
+
+export default class StoreSequelize extends Model<IStoreEntity, IStoreBuildAttributes> implements IStoreEntity {
+    id!: string
+    name!: string
+    ip!: string
+    type_id!: number
 }
 
-const StoreSequelize = sequelize.define<IStoreInstance>('store', {
+StoreSequelize.init({
+    id: {
+        allowNull: false,
+        autoIncrement: false,
+        primaryKey: true,
+        type: DataTypes.UUID,
+    },
+    name: {
+        allowNull: false,
+        type: DataTypes.STRING
+    },
+    ip: {
+        allowNull: false,
+        type: DataTypes.STRING
+    },
+    type_id: {
+        allowNull: true,
+        type: DataTypes.INTEGER
+    }
+}, {
+    timestamps: false,
+    sequelize: sequelize,
+    modelName: 'store'
+})
+
+/* const StoreSequelize = sequelize.define<IStoreInstance>('store', {
     id: {
         allowNull: false,
         autoIncrement: false,
@@ -30,10 +57,10 @@ const StoreSequelize = sequelize.define<IStoreInstance>('store', {
     }
 })
 
-StoreSequelize.hasMany(TypeStoreSequelize, {
-    foreignKey: 'type_id',
-    sourceKey: 'id',
+StoreSequelize.belongsTo(TypeStoreSequelize, {
+    foreignKey: 'id',
     as: 'type_store'
 })
 
 export { StoreSequelize }
+ */

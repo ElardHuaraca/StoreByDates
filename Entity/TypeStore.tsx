@@ -1,6 +1,6 @@
-import { sequelize } from "@/helpers/DatabaseController";
 import { Optional, Model, DataTypes } from 'sequelize'
-import { StoreSequelize } from "./Store";
+import { sequelize } from './SequelizeDB'
+import StoreSequelize from './Store'
 
 interface ITypeStoreBuildAttributes extends Optional<IType_Store, 'id'> { }
 interface ITypeStoreInstance extends Model<IType_Store, ITypeStoreBuildAttributes>, IType_Store {
@@ -8,8 +8,29 @@ interface ITypeStoreInstance extends Model<IType_Store, ITypeStoreBuildAttribute
     updatedAt?: Date
 }
 
+export default class TypeStoreSequelize extends Model<IType_Store, ITypeStoreBuildAttributes> implements IType_Store {
+    id!: number
+    name!: string
+}
 
-const TypeStoreSequelize = sequelize.define<ITypeStoreInstance>('store', {
+TypeStoreSequelize.init({
+    id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+    },
+    name: {
+        allowNull: false,
+        type: DataTypes.STRING
+    }
+}, {
+    timestamps: false,
+    sequelize: sequelize,
+    modelName: 'type_store'
+})
+
+/* const TypeStoreSequelize = sequelize().define<ITypeStoreInstance>('store', {
     id: {
         allowNull: false,
         autoIncrement: false,
@@ -23,8 +44,9 @@ const TypeStoreSequelize = sequelize.define<ITypeStoreInstance>('store', {
 })
 
 TypeStoreSequelize.hasMany(StoreSequelize, {
-    foreignKey: 'type_id',
+    foreignKey: 'id',
+    sourceKey: 'type_id',
     as: 'stores'
 })
 
-export { TypeStoreSequelize }
+export { TypeStoreSequelize } */
