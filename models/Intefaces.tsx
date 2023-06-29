@@ -1,6 +1,8 @@
 interface IStoreModel {
     id: string
     name: string
+    ip?: string
+    type_id?: number
 }
 
 interface IStoreEntity {
