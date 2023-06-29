@@ -22,13 +22,8 @@ export async function InitDatabaseAndModels() {
 
 export async function AllStores() {
     const results = await StoreSequelize.findAll()
-    return results.map(res => {
-        const data: IStoreModel = {
-            id: res.id,
-            name: res.name,
-        }
-        return data
-    })
+
+    return results
 }
 
 export async function StoreById(id: string) {
