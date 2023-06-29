@@ -31,8 +31,11 @@ export async function AllStores() {
     })
 }
 
-export async function StoreById(id: number) {
-    const [results, _] = await connect.execute('SELECT ip,type_name FROM store LEFT JOIN type_store ON store.type_id = type_store.id WHERE store.id = ? ', [id])
+export async function StoreById(id: string) {
+    const results = await StoreSequelize.findOne({
+        where: { id },
+        include: [TypeStoreSequelize]
+    })
 
     return results
 }
