@@ -10,11 +10,11 @@ export async function GET() {
     }
 
     /* avoid cache */
-    const stores = await AllStores() as IStoreModel[]
+    const stores = await AllStores()
 
     if (stores.length === 0) return NextResponse.json({}, { status: 404 })
 
-    return NextResponse.json([])
+    return NextResponse.json(stores)
 }
 
 export async function POST(request: Request) {
