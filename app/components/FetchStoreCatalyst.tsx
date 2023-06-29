@@ -1,4 +1,5 @@
 'use server'
+
 const STRUCTURES = [
     {
         types: '3640, 4640, 5650',
@@ -18,7 +19,7 @@ const fetchStoreDetails = async (id: string) => {
 /* https://10.0.75.57/pml/login/authenticatewithobject
  */
 export async function fetchStoresCatalystById(id: string) {
-    const details = await fetchStoreDetails(id) as DetailStore
+    const details = await fetchStoreDetails(id) as IDetailStoreModel
 
     if (Object.keys(details).length === 0) return null
 
