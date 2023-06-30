@@ -4,9 +4,9 @@ import { NextResponse } from "next/server";
 
 export async function GET(_: Request, { params }: { params: { id: string } }) {
     const { id } = params;
-    const store = await StoreById(id) as unknown as IDetailStoreModel[]
+    const store = await StoreById(id) as unknown as IDetailStoreModel
 
-    if (store?.length === 0 || store === null) return NextResponse.json({}, { status: 404 })
+    if (store === null) return NextResponse.json({}, { status: 404 })
 
-    return NextResponse.json(store[0]);
+    return NextResponse.json(store);
 }
