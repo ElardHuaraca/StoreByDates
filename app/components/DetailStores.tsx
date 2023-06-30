@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { fetchStoresCatalystById } from "./FetchStoreCatalyst"
 
-export function DetailStores({ id }: { id: string }) {
+export default function DetailStores({ id }: { id: string }) {
     const [fetchState, setFetchState] = useState<IDetailStoreModel | null>(null)
     const [isLoading, setLoading] = useState(true)
 
