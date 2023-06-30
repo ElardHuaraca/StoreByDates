@@ -34,3 +34,9 @@ export async function StoreById(id: string) {
 
     return results
 }
+
+export async function AllTypeStore() {
+    const results = await TypeStoreSequelize.findAll()
+
+    return results
+}
