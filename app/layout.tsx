@@ -1,3 +1,4 @@
+import Script from 'next/script'
 import Header from './components/Header'
 import './globals.css'
 import { Inter } from 'next/font/google'
@@ -20,6 +21,7 @@ export default function RootLayout({
       <body className={`${inter.className} min-h-screen`}>
         <Header />
         {children}
+        <Script src="/js/flowbite.min.js" strategy="beforeInteractive"></Script>
       </body>
     </html>
   )
