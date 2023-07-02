@@ -6,12 +6,12 @@ interface ButtonReportProps extends React.ButtonHTMLAttributes<HTMLButtonElement
     textButton: string | JSX.Element
 }
 
-const ButtonReport: React.FC<ButtonReportProps> = ({ textButton, ...props }) => {
+const ButtonComponent: React.FC<ButtonReportProps> = ({ textButton, ...props }) => {
     return (
-        <button {...props} onClick={() => { console.log('Generar reporte') }} >
+        <button {...props} >
             <span>{textButton}</span>
         </button>
     )
 }
 
-export { ButtonReport }
+export { ButtonComponent }
