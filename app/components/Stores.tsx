@@ -1,4 +1,4 @@
-import CreateUpdateStore from "./CreateUpdateStore"
+import UDStoreComponent from "./UDStoreComponent"
 import DetailStores from "./DetailStores"
 
 const fetchStores = () => fetch(process.env.API_ROUTE_BASE + "/stores", {
@@ -53,7 +53,7 @@ const STORE_TYPE_WRITE = async ({ stores }: { stores: IStoreModel[] }) => {
                         <td className="border-b-2 border-l-2 border-emerald-400 py-2">{store.name}</td>
                         <td className="border-b-2 border-x-2 border-emerald-400 py-2">{store.ip}</td>
                         <td className="border-b-2 border-x-2 border-emerald-400 py-2">
-                            <CreateUpdateStore id={`${store.id}`} />
+                            <UDStoreComponent id={`${store.id}`} />
                         </td>
                     </tr>
                 )
