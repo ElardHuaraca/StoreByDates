@@ -3,7 +3,7 @@ interface IStoreModel {
     name: string
     ip?: string
     type_id?: number
-    type_store?: string
+    type_store?: IType_Store
 }
 
 interface IStoreEntity {
