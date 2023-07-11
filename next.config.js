@@ -8,20 +8,6 @@ const nextConfig = {
     {
         serverActions: true,
         serverComponentsExternalPackages: ['sequelize']
-    },
-    webpack: (config, { isServer }) => {
-        config.plugins.push(
-            new CopyWebPackPlugin({
-                patterns: [
-                    {
-                        from: path.resolve(__dirname, 'node_modules/flowbite/dist/flowbite.min.js'),
-                        to: path.resolve(__dirname, 'public/js')
-                    }
-                ]
-            })
-        )
-
-        return config
     }
 }
 
