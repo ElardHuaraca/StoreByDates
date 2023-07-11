@@ -55,7 +55,7 @@ const STORE_TYPE_WRITE = async ({ stores }: { stores: IStoreModel[] }) => {
                         <td className="border-b-2 border-x-2 border-emerald-400 py-2">{store.ip}</td>
                         <td className="border-b-2 border-r-2 border-emerald-400 py-2">{store.type_store === null ? 'N.A.' : store.type_store?.name}</td>
                         <td className="border-b-2 border-x-2 border-emerald-400 py-2">
-                            <UDStoreComponent id={`${store.id}`} />
+                            <UDStoreComponent data={store} />
                         </td>
                     </tr>
                 )
