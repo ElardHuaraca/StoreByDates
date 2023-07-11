@@ -1,6 +1,7 @@
 import { StoreSequelize, TypeStoreSequelize } from '@/Entity'
 import { sequelize } from '@/Entity/SequelizeDB'
 import MYSQL from 'mysql2'
+import { STRUCTURES } from './StoreSuport'
 
 const connection = MYSQL.createPool({
     host: process.env.DB_HOST,
@@ -13,15 +14,24 @@ const connection = MYSQL.createPool({
 const connect = connection.promise()
 
 export async function InitDatabaseAndModels() {
-    await connect.execute(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME}`)
+    connection.getConnection((_, conn) => {
+        conn.execute(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME}`)
+        conn.changeUser({ database: process.env.DB_NAME })
+        conn.release()
+    })
+
     await sequelize.sync()
     await StoreSequelize.findAll()
     await TypeStoreSequelize.findAll()
-
+    STRUCTURES.forEach(async (structure) => {
+        await connect.execute(`INSERT INTO type_stores(name) SELECT * FROM (SELECT "${structure.types}") AS tmp WHERE NOT EXISTS(SELECT name FROM type_stores WHERE name="${structure.types}") LIMIT 1`)
+    })
 }
 
 export async function AllStores() {
-    const results = await StoreSequelize.findAll()
+    const results = await StoreSequelize.findAll({
+        include: [TypeStoreSequelize]
+    })
 
     return results
 }
