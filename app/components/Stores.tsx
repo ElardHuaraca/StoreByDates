@@ -1,16 +1,10 @@
 import UDStoreComponent from "./UDStoreComponent"
 import DetailStores from "./DetailStores"
-
-const fetchStores = () => fetch(process.env.API_ROUTE_BASE + "/stores", {
-    cache: 'no-store'
-}).then(res => {
-    if (res.ok) return res.json()
-
-}).catch(err => { console.error(err) })
+import { GetStores } from "./fetch/FetchCRUDStore"
 
 type TStoreType = 'show' | 'write'
 
-const STORES_TYPE_SHOW = ({ stores }: { stores: IStoreModel[] }) => {
+const STORES_TYPE_SHOW = ({ stores }: { stores?: IStoreModel[] }) => {
     return (
         <table className="table-auto border-separate w-full text-center border-spacing-0">
             <thead>
@@ -36,7 +30,7 @@ const STORES_TYPE_SHOW = ({ stores }: { stores: IStoreModel[] }) => {
     )
 }
 
-const STORE_TYPE_WRITE = async ({ stores }: { stores: IStoreModel[] }) => {
+const STORE_TYPE_WRITE = async ({ stores }: { stores?: IStoreModel[] }) => {
 
     return (<table className="table-auto border-separate w-full text-center border-spacing-0">
         <thead>
@@ -68,7 +62,7 @@ const STORE_TYPE_WRITE = async ({ stores }: { stores: IStoreModel[] }) => {
 
 export default async function Stores({ type }: { type: TStoreType }) {
 
-    const stores: IStoreModel[] = await fetchStores()
+    const stores = await GetStores()
 
     return (<>{type === 'show' ? STORES_TYPE_SHOW({ stores }) : await STORE_TYPE_WRITE({ stores })}</>)
 }
