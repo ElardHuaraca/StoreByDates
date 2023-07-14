@@ -1,12 +1,15 @@
 'use client'
 
-import React, { useState } from "react"
+import { useEffect, useState } from "react"
 import { ButtonComponent } from "./ButtonComponent"
 import { CreateUpdateStores } from "./fetch/FetchCRUDStore"
+import { FetchTypeStores } from "./fetch/FetchTypeStore"
 
 export default function CRUDModal({ data, textButton, styleButton }: { data?: IStoreModel, textButton: string | JSX.Element, styleButton: string }) {
     const [isOpenModal, setIsOpenModal] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [typesStore, setTypesStore] = useState<IType_Store[] | undefined>(undefined)
+    const [selectTypeStore, setSelectTypeStore] = useState<number | string>('na')
 
     const clickOutsideModal = (e: any) => { if (e.target.id === data?.id) setIsOpenModal(false) }
 
@@ -14,6 +17,15 @@ export default function CRUDModal({ data, textButton, styleButton }: { data?: IS
         setIsLoading(true)
         await CreateUpdateStores({ id: data?.id, formData })
     }
+
+    useEffect(() => {
+        const typeStores = async () => {
+            const result = await FetchTypeStores()
+            setTypesStore(result)
+        }
+        typeStores()
+        setSelectTypeStore(data?.type_id || 'na')
+    }, [])
 
     return (
         <>
@@ -29,19 +41,25 @@ export default function CRUDModal({ data, textButton, styleButton }: { data?: IS
                         <form action={createUpdateStore} className="mt-4 space-y-8">
                             <div className="text-start">
                                 <label htmlFor="name_store" className="block text-base font-medium text-white mb-2 m-0">Nombre:</label>
-                                <input type="text" name="name_store" id="name_store" className="bg-gray-500 w-full rounded-lg h-8 px-4" placeholder="Nombre del Store" />
+                                <input type="text" name="name_store" id="name_store" className="bg-gray-500 w-full rounded-lg h-8 px-4"
+                                    placeholder="Nombre del Store" defaultValue={data?.name}/>
                             </div>
                             <div className="flex justify-between text-start pb-12">
                                 <div className="w-[45%]">
                                     <label htmlFor="ip_store" className="block text-base font-medium text-white mb-2 m-0">IP:</label>
-                                    <input type="text" name="ip_store" id="ip_store" className="bg-gray-500 w-full rounded-lg h-8 px-4" placeholder="Dirección del Store" />
+                                    <input type="text" name="ip_store" id="ip_store" className="bg-gray-500 w-full rounded-lg h-8 px-4"
+                                        placeholder="Dirección del Store" defaultValue={data?.ip}/>
                                 </div>
                                 <div className="w-[45%]">
                                     <label htmlFor="version_store" className="block text-base font-medium text-white mb-2 m-0">Version:</label>
-                                    <select name="version_store" id="version_store" className="bg-gray-500 w-full rounded-lg h-8 px-2">
-                                        <option value="1.16.5">1.16.5</option>
-                                        <option value="1.16.4">1.16.4</option>
-                                        <option value="1.16.3">1.16.3</option>
+                                    <select name="version_store" id="version_store" className="bg-gray-500 w-full rounded-lg h-8 px-2"
+                                        value={selectTypeStore} onChange={(e) => setSelectTypeStore(e.target.value)}>
+                                        <option value="na">N.A.</option>
+                                        {
+                                            typesStore?.map((item, index) => {
+                                                return <option key={index} value={item.id}>{item.name}</option>
+                                            })
+                                        }
                                     </select>
                                 </div>
                             </div>
