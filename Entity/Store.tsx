@@ -8,7 +8,7 @@ export default class StoreSequelize extends Model<IStoreEntity, IStoreBuildAttri
     id!: string
     name!: string
     ip!: string
-    type_id!: number
+    type_id?: number
 }
 
 StoreSequelize.init({
