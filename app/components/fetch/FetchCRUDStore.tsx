@@ -5,11 +5,31 @@ export async function GetStores() {
         .then(res => { if (res.ok) return res.json() })
         .catch(err => { console.error(err) })
 
-    if (Object.keys(types).length === 0) return undefined
-
-    return types as IStoreModel[]
+    return types as IStoreModel[] | undefined
 }
 
 export async function CreateUpdateStores({ id, formData }: { id?: string, formData: FormData }) {
-    console.log(id, formData)
+    const url = id ? process.env.API_ROUTE_BASE + "/stores/" + id : process.env.API_ROUTE_BASE + "/stores"
+    const requestOptions: RequestInit = {
+        cache: 'no-store',
+        method: id ? 'PUT' : 'POST',
+        body: formData
+    }
+
+    const store = await fetch(url, requestOptions)
+        .then(res => { if (res.ok) return res.json() })
+        .catch(err => { console.error(err) })
+
+    return store as IStoreModel | undefined
+}
+
+export async function DeleteStore(id: string) {
+    const reponse = await fetch(process.env.API_ROUTE_BASE + "/stores/" + id, { cache: 'no-store', method: 'DELETE' })
+        .then(res => {
+            if (res.ok) return true
+            else return false
+        })
+        .catch(err => { console.error(err) })
+
+    return reponse
 }
