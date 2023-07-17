@@ -2,13 +2,13 @@ import { StoreSequelize, TypeStoreSequelize } from '@/Entity'
 import { sequelize } from '@/Entity/SequelizeDB'
 import MYSQL from 'mysql2'
 import { STRUCTURES } from './StoreSuport'
+import { randomUUID } from 'crypto'
 
 const connection = MYSQL.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     waitForConnections: true,
-    connectionLimit: 10,
 })
 
 const connect = connection.promise()
@@ -49,4 +49,15 @@ export async function AllTypeStore() {
     const results = await TypeStoreSequelize.findAll()
 
     return results
+}
+
+export async function SaveStore({ name, ip, type }: { name: string, ip: string, type: number | undefined }) {
+    const store = await StoreSequelize.create({ id: randomUUID().toString(), name, ip, type_id: type })
+    const result = await StoreSequelize.findOne({ where: { id: store.id }, include: [TypeStoreSequelize] })
+    return result
+}
+
+export async function DeleteStore(id: string) {
+    const result = await StoreSequelize.destroy({ where: { id } })
+    return result
 }

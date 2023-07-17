@@ -1,5 +1,5 @@
-import { AllStores, InitDatabaseAndModels } from "@/helpers/DatabaseController";
-import { NextResponse } from "next/server";
+import { AllStores, InitDatabaseAndModels, SaveStore } from "@/helpers/DatabaseController";
+import { NextRequest, NextResponse } from "next/server";
 
 let Initialized = false
 
@@ -17,6 +17,9 @@ export async function GET() {
     return NextResponse.json(stores)
 }
 
-export async function POST(request: Request) {
-    return NextResponse.json(await request.json())
+export async function POST(request: NextRequest) {
+    const { name_store, ip_store, version_store } = Object.fromEntries(await request.formData())
+    const type = version_store === 'na' ? undefined : Number(version_store)
+    const store = await SaveStore({ name: name_store.toString(), ip: ip_store.toString(), type })
+    return NextResponse.json(store)
 }
