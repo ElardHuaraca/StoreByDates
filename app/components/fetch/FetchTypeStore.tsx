@@ -5,7 +5,5 @@ export async function FetchTypeStores() {
         .then(res => { if (res.ok) return res.json() })
         .catch(err => { console.error(err) })
 
-    if (Object.keys(types).length === 0) return undefined
-
-    return types as IType_Store[]
+    return types as IType_Store[] | undefined
 }

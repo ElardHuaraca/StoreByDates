@@ -10,7 +10,7 @@ const ButtonComponent: React.FC<ButtonReportProps> = ({ textButton, ...props }) 
     return (
         <button {...props} >
             <span>{textButton}</span>
-        </button>
+        </button >
     )
 }
 
