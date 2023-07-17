@@ -44,7 +44,7 @@ const STORE_TYPE_WRITE = async ({ stores }: { stores?: IStoreModel[] }) => {
         <tbody>
             {stores?.map((store) => {
                 return (
-                    <tr key={store.id}>
+                    <tr key={store.id} tr-key={store.id}>
                         <td className="border-b-2 border-l-2 border-emerald-400 py-2">{store.name}</td>
                         <td className="border-b-2 border-x-2 border-emerald-400 py-2">{store.ip}</td>
                         <td className="border-b-2 border-r-2 border-emerald-400 py-2">{store.type_store === null ? 'N.A.' : store.type_store?.name}</td>
@@ -53,7 +53,7 @@ const STORE_TYPE_WRITE = async ({ stores }: { stores?: IStoreModel[] }) => {
                         </td>
                     </tr>
                 )
-            }) || <tr><td colSpan={3} className="border-b-2 border-x-2 border-emerald-400 py-2">No se ha registrado ningun STORE ONCE</td></tr>
+            }) || <tr><td colSpan={4} className="border-b-2 border-x-2 border-emerald-400 py-2">No se ha registrado ningun STORE ONCE</td></tr>
             }
         </tbody>
     </table>
