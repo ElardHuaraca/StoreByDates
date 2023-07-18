@@ -17,7 +17,11 @@ export async function CreateUpdateStores({ id, formData }: { id?: string, formDa
     }
 
     const store = await fetch(url, requestOptions)
-        .then(res => { if (res.ok) return res.json() })
+        .then(res => {
+            if (res.ok) return res.json()
+            else if (res.status === 404) return undefined
+
+        })
         .catch(err => { console.error(err) })
 
     return store as IStoreModel | undefined

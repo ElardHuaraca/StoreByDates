@@ -61,3 +61,8 @@ export async function DeleteStore(id: string) {
     const result = await StoreSequelize.destroy({ where: { id } })
     return result
 }
+
+export async function UpdateStore({ id, name, ip, type }: { id: string, name: string, ip: string, type: number | undefined }) {
+    const result = await StoreSequelize.update({ name, ip, type_id: type }, { where: { id } })
+    return result[0]
+}

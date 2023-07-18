@@ -44,6 +44,18 @@ export default function CRUDModal({ data, textButton, styleButton }: { data?: IS
             col_2.innerText = response.ip!
             col_3.innerText = response.type_store?.name || 'N.A.'
             createRoot(col_4).render(<UDStoreComponent data={response} />)
+        } else {
+            if (response === undefined) {
+                setIsLoading(false)
+                setIsOpenModal(false)
+                return
+            }
+
+            const row = document.querySelector(`tr[tr-key="${data.id}"]`) as HTMLTableRowElement
+            row.cells[0].innerText = response!.name
+            row.cells[1].innerText = response!.ip!
+            row.cells[2].innerText = response!.type_store?.name || 'N.A.'
+            setSelectTypeStore(response!.type_store?.id || 'na')
         }
 
         setIsLoading(false)
