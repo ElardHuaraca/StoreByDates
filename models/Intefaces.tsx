@@ -10,7 +10,7 @@ interface IStoreEntity {
     id: string
     name: string
     ip: string
-    type_id?: number
+    type_id?: number | null
 }
 
 interface IType_Store {
