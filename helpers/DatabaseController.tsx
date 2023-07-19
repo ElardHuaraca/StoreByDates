@@ -62,7 +62,8 @@ export async function DeleteStore(id: string) {
     return result
 }
 
-export async function UpdateStore({ id, name, ip, type }: { id: string, name: string, ip: string, type: number | undefined }) {
-    const result = await StoreSequelize.update({ name, ip, type_id: type }, { where: { id } })
+export async function UpdateStore({ id, name, ip, type }: { id: string, name: string, ip: string, type: number | null }) {
+    /* set null if type is undefined */
+    const result = await StoreSequelize.update({ name, ip, type_id: type ?? null }, { where: { id } })
     return result[0]
 }
