@@ -10,7 +10,7 @@ const STORES_TYPE_SHOW = ({ stores }: { stores?: IStoreModel[] }) => {
             <thead>
                 <tr>
                     <th className=" w-1/2 border-l-[3px] border-y-[3px] border-emerald-400 bg-emerald-600 rounded-tl-2xl">STORE ONCE</th>
-                    <th className=" w-1/2 border-[3px] border-emerald-400 bg-emerald-600 rounded-tr-2xl">STORES</th>
+                    <th className=" w-1/2 border-[3px] border-emerald-400 bg-emerald-600 rounded-tr-2xl">Almacenes</th>
                 </tr>
             </thead>
             <tbody>
@@ -19,7 +19,7 @@ const STORES_TYPE_SHOW = ({ stores }: { stores?: IStoreModel[] }) => {
                         <tr key={store.id}>
                             <td className="border-b-2 border-l-2 border-emerald-400 py-2">{store.name}</td>
                             <td className="border-b-2 border-x-2 border-emerald-400 py-2">
-                                <DetailStores id={`${store.id}`} />
+                                <DetailStores store={store} />
                             </td>
                         </tr>
                     )
