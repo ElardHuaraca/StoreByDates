@@ -1,5 +1,5 @@
 'use server'
-import { STRUCTURES, StoreType, Structure } from '@/helpers/StoreSuport'
+import { STRUCTURES, StoreConvertByteToRespectiveValue, StoreType, Structure } from '@/helpers/StoreSuport'
 
 /* type_function_by_store_type by StoreType return await functions */
 const type_function_by_store_type = {
@@ -46,7 +46,7 @@ async function fetchStoresLower5650({ type, data }: { type: Structure, data: ISt
             else return <p className='text-lg'>Error al autenticarse</p>
         }).catch(e => console.log(e))
 
-    if (credentials.access_token === undefined) return credentials
+    if (credentials === undefined) return credentials
 
     const requestUUID: RequestInit = {
         cache: 'no-cache',
@@ -72,13 +72,27 @@ async function fetchStoresLower5650({ type, data }: { type: Structure, data: ISt
             if (res.ok) return res.json()
             else return <p className='text-lg'>Error al obtener los Almacenes Catalysts</p>
         }).catch(e => console.log(e))
-
     return (
         <>
             {store_catalyst.members.map((item: any) => {
                 return (
-                    <li key={item.systemUuid}>
-                        <p>{item.name}</p>
+                    <li key={item.name}>
+                        <div className="flex flex-row ps-4">
+                            <div className="w-1/5 border">
+                                <label htmlFor={`${data.ip}-${item.name}`} className="h-full w-full flex justify-evenly p-2">
+                                    <input type="checkbox" name={`${data.ip}-${item.name}`} id={`${data.ip}-${item.name}`} className="scale-125" />
+                                </label>
+                            </div>
+                            <div className="w-1/2 text-start border">
+                                <p className="p-2">{item.name}</p>
+                            </div>
+                            <div className="w-1/5 border">
+                                <p className="p-2">{StoreConvertByteToRespectiveValue({ bytes: item.userBytes })}</p>
+                            </div>
+                            <div className="w-1/5 border">
+                                <p className="p-2">{StoreConvertByteToRespectiveValue({ bytes: item.diskBytes })}</p>
+                            </div>
+                        </div>
                     </li>
                 )
             })}
