@@ -6,7 +6,7 @@ type TStoreType = 'show' | 'write'
 
 const STORES_TYPE_SHOW = ({ stores }: { stores?: IStoreModel[] }) => {
     return (
-        <table className="table-auto border-separate w-full text-center border-spacing-0">
+        <table className="table-auto border-separate w-full text-center border-spacing-0" id="store_type_show">
             <thead>
                 <tr>
                     <th className=" w-1/2 border-l-[3px] border-y-[3px] border-emerald-400 bg-emerald-600 rounded-tl-2xl">STORE ONCE</th>
