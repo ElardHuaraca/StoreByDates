@@ -28,3 +28,24 @@ export const STRUCTURES: Structure[] = [
         authorization: (key: string) => { return `Basic ${btoa(key)}` }
     }
 ]
+
+
+export function StoreConvertByteToRespectiveValue({ bytes }: { bytes: number }) {
+    const byte = 1024
+    const mebiByte = byte * byte
+    const gibiByte = mebiByte * byte
+    const tebiByte = gibiByte * byte
+    const pebiByte = tebiByte * byte
+
+    if (bytes >= pebiByte) {
+        return (bytes / pebiByte).toFixed(1) + 'PiB'
+    } else if (bytes >= tebiByte) {
+        return (bytes / tebiByte).toFixed(1) + 'TiB'
+    } else if (bytes >= gibiByte) {
+        return (bytes / gibiByte).toFixed(1) + 'GiB'
+    } else if (bytes >= mebiByte) {
+        return (bytes / mebiByte).toFixed(1) + 'MiB'
+    } else {
+        return bytes + 'B'
+    }
+}
