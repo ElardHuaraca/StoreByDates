@@ -4,7 +4,7 @@ import { STRUCTURES, StoreConvertByteToRespectiveValue, StoreType, Structure } f
 /* type_function_by_store_type by StoreType return await functions */
 const type_function_by_store_type = {
     [StoreType.TYPE_1]: fetchStoresLower5650,
-    [StoreType.TYPE_2]: fetchStoresLower5650,
+    [StoreType.TYPE_2]: fetStores49006600,
 }
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
@@ -18,7 +18,6 @@ export async function fetchStoresCatDalyst({ data }: { data: IStoreModel }) {
 
     /* call type_function_by_store_type */
     const response = await type_function_by_store_type[StoreType.TYPE_1]({ type, data })
-
 
     return (
         <ul>
@@ -46,7 +45,7 @@ async function fetchStoresLower5650({ type, data }: { type: Structure, data: ISt
             else return <p className='text-lg'>Error al autenticarse</p>
         }).catch(e => console.log(e))
 
-    if (credentials === undefined) return credentials
+    if (credentials === undefined || credentials.access_token === undefined) return credentials
 
     const requestUUID: RequestInit = {
         cache: 'no-cache',
@@ -98,5 +97,9 @@ async function fetchStoresLower5650({ type, data }: { type: Structure, data: ISt
             })}
         </>
     )
+
+}
+
+async function fetStores49006600({ type, data }: { type: Structure, data: IStoreModel }) {
 
 }
