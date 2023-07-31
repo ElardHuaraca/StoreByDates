@@ -1,7 +1,8 @@
 /* types */
 export type Structure = {
+    type: StoreType
     types: string,
-    api_auth: string,
+    api_auth?: string,
     api_uuid?: string,
     api_catalyst?: string,
     authorization: (key: string) => string
@@ -16,6 +17,7 @@ export enum StoreType {
 /* data */
 export const STRUCTURES: Structure[] = [
     {
+        type: StoreType.TYPE_1,
         types: '3640, 4640, 5650',
         api_auth: 'pml/login/authenticatewithobject',
         api_uuid: 'pml/clustermanagement',
@@ -23,8 +25,9 @@ export const STRUCTURES: Structure[] = [
         authorization: (key: string) => { return `Bearer ${key}` }
     },
     {
+        type: StoreType.TYPE_2,
         types: '4900, 6600',
-        api_auth: '/fusion/authheartbeat?media=txt',
+        api_catalyst: 'd2dservices/cluster/allstores?media=json&ui=gui',
         authorization: (key: string) => { return `Basic ${btoa(key)}` }
     }
 ]
