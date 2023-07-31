@@ -9,8 +9,8 @@ const STORES_TYPE_SHOW = ({ stores }: { stores?: IStoreModel[] }) => {
         <table className="table-auto border-separate w-full text-center border-spacing-0" id="store_type_show">
             <thead>
                 <tr>
-                    <th className=" w-1/2 border-l-[3px] border-y-[3px] border-emerald-400 bg-emerald-600 rounded-tl-2xl">STORE ONCE</th>
-                    <th className=" w-1/2 border-[3px] border-emerald-400 bg-emerald-600 rounded-tr-2xl">Almacenes</th>
+                    <th className=" w-[25%] border-l-[3px] border-y-[3px] border-emerald-400 bg-emerald-600 rounded-tl-2xl">STORE ONCE</th>
+                    <th className=" w-[75%] border-[3px] border-emerald-400 bg-emerald-600 rounded-tr-2xl">Almacenes</th>
                 </tr>
             </thead>
             <tbody>
