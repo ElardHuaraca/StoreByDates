@@ -88,7 +88,7 @@ async function fetchStoresLower5650({ type, data }: { type: Structure, data: ISt
                         <div className="flex flex-row ps-4">
                             <div className="w-1/5 border">
                                 <label htmlFor={`${data.ip}-${item.name}`} className="h-full w-full flex justify-evenly p-2">
-                                    <input type="checkbox" name={`${data.ip}-${item.name}-${data.name}`} id={`${data.ip}-${item.name}-${data.name}`} className="scale-125" />
+                                    <input type="checkbox" name={`${item.name}--${data.name}`} id={`${data.ip}-${item.name}`} className="scale-125" />
                                 </label>
                             </div>
                             <div className="w-1/2 text-start border">
@@ -136,7 +136,7 @@ async function fetStores49006600({ type, data }: { type: Structure, data: IStore
                         <div className="flex flex-row ps-4">
                             <div className="w-1/5 border">
                                 <label htmlFor={`${data.ip}-${item.name}`} className="h-full w-full flex justify-evenly p-2">
-                                    <input type="checkbox" name={`${data.ip}-${item.name}-${data.name}`} id={`${data.ip}-${item.name}-${data.name}`} className="scale-125" />
+                                    <input type="checkbox" name={`${item.name}--${data.name}`} id={`${data.ip}-${item.name}`} className="scale-125" />
                                 </label>
                             </div>
                             <div className="w-1/2 text-start border">
