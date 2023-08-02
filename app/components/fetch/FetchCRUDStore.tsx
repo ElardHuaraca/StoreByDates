@@ -37,3 +37,14 @@ export async function DeleteStore(id: string) {
 
     return reponse
 }
+
+export async function GetStoreByName(name: string) {
+    const store = await fetch(process.env.API_ROUTE_BASE + "/stores/name" + name, { cache: 'no-cache' })
+        .then(res => {
+            if (res.ok) return res.json()
+            else if (res.status === 404) return undefined
+        })
+        .catch(err => { console.error(err) })
+
+    return store as IStoreModel | undefined
+}
