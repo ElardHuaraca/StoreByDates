@@ -67,3 +67,8 @@ export async function UpdateStore({ id, name, ip, type }: { id: string, name: st
     const result = await StoreSequelize.update({ name, ip, type_id: type ?? null }, { where: { id } })
     return result[0]
 }
+
+export async function StoreByName({ name }: { name: string }) {
+    const results = await StoreSequelize.findOne({ where: { name }, include: [TypeStoreSequelize] })
+    return results
+}
