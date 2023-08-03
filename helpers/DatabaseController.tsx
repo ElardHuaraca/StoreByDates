@@ -36,7 +36,7 @@ export async function AllStores() {
     return results
 }
 
-export async function StoreById(id: string) {
+export async function StoreById({ id }: { id: string }) {
     const results = await StoreSequelize.findOne({
         where: { id },
         include: [TypeStoreSequelize]
@@ -57,7 +57,7 @@ export async function SaveStore({ name, ip, type }: { name: string, ip: string, 
     return result
 }
 
-export async function DeleteStore(id: string) {
+export async function DeleteStore({ id }: { id: string }) {
     const result = await StoreSequelize.destroy({ where: { id } })
     return result
 }
