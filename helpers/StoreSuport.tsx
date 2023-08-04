@@ -1,13 +1,4 @@
-/* types */
-export type Structure = {
-    type: StoreType
-    types: string,
-    api_auth?: string,
-    api_uuid?: string,
-    api_catalyst?: string,
-    authorization: (key: string) => string
-
-}
+import { Structure } from "@/models/Types"
 
 /* enum */
 export enum StoreType {
