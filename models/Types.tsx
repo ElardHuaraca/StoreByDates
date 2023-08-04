@@ -11,6 +11,6 @@ export type Structure = {
 }
 
 export type Data = {
-    store: string,
+    store?: IStoreModel,
     catalysts: string[]
 }
