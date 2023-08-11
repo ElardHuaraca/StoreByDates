@@ -23,7 +23,7 @@ const STORES_TYPE_SHOW = ({ stores }: { stores?: IStoreModel[] }) => {
                             <td className="border-b-2 border-x-2 border-emerald-400 py-2">
                                 <DetailStores store={store} />
                             </td>
-                            <td className="border-b-2 border-e-2 border-emerald-400 py-2 flex gap-2 px-3 items-center justify-center">
+                            <td className="border-b-2 border-e-2 border-emerald-400 py-2 flex gap-2 px-3 items-center justify-center relative">
                                 <DateTimePicker name_input="date_start" content_span="Inicio: " />
                                 <DateTimePicker name_input="date_end" content_span="Fin: " />
                             </td>
