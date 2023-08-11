@@ -1,6 +1,7 @@
 import UDStoreComponent from "./UDStoreComponent"
 import DetailStores from "./DetailStores"
 import { GetStores } from "./fetch/FetchCRUDStore"
+import DateTimePicker from "./DateTimePicker"
 
 type TStoreType = 'show' | 'write'
 
@@ -9,8 +10,9 @@ const STORES_TYPE_SHOW = ({ stores }: { stores?: IStoreModel[] }) => {
         <table className="table-auto border-separate w-full text-center border-spacing-0" id="store_type_show">
             <thead>
                 <tr>
-                    <th className=" w-[25%] border-l-[3px] border-y-[3px] border-emerald-400 bg-emerald-600 rounded-tl-2xl">STORE ONCE</th>
-                    <th className=" w-[75%] border-[3px] border-emerald-400 bg-emerald-600 rounded-tr-2xl">Almacenes</th>
+                    <th className=" w-[20%] border-l-[3px] border-y-[3px] border-emerald-400 bg-emerald-600 rounded-tl-2xl">STORE ONCE</th>
+                    <th className=" w-[60%] border-x-[3px] border-y-[3px] border-emerald-400 bg-emerald-600">Almacenes</th>
+                    <th className=" w-[20%] border-r-[3px] border-y-[3px] border-emerald-400 bg-emerald-600 rounded-tr-2xl">Fechas:</th>
                 </tr>
             </thead>
             <tbody>
@@ -20,6 +22,10 @@ const STORES_TYPE_SHOW = ({ stores }: { stores?: IStoreModel[] }) => {
                             <td className="border-b-2 border-l-2 border-emerald-400 py-2">{store.name}</td>
                             <td className="border-b-2 border-x-2 border-emerald-400 py-2">
                                 <DetailStores store={store} />
+                            </td>
+                            <td className="border-b-2 border-e-2 border-emerald-400 py-2 flex gap-2 px-3 items-center justify-center">
+                                <DateTimePicker name_input="date_start" content_span="Inicio: " />
+                                <DateTimePicker name_input="date_end" content_span="Fin: " />
                             </td>
                         </tr>
                     )
