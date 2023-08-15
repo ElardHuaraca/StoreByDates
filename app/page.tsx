@@ -10,11 +10,7 @@ export default function Home() {
         <ButtonGenerateReport />
         <div className="w-[65%] flex px-4">
           <div className="w-full flex items-center gap-4">
-            <div className="flex items-center gap-1">
-              <DateTimePicker name_input="date_start" content_span="Inicio: " />
-              <DateTimePicker name_input="date_end" content_span="Fin: " />
-            </div>
-            <div className="w-5/6" id="loading_container"></div>
+            <div className="w-full" id="loading_container"></div>
           </div>
         </div>
         <ButtonComponent textButton="Descargar reporte"
