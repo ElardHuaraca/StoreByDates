@@ -14,5 +14,6 @@ export type Structure = {
 
 export type Data = {
     store?: IStoreModel,
-    catalysts: string[]
+    catalysts: string[],
+    dates?: NodeListOf<HTMLInputElement>
 }
