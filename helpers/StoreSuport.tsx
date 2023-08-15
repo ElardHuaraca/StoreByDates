@@ -13,15 +13,16 @@ export const STRUCTURES: Structure[] = [
         api_auth: 'pml/login/authenticatewithobject',
         api_uuid: 'pml/clustermanagement',
         api_catalyst: 'rest/index/resources',
-        api_elements: ({ key_1: id }) => `api/v1/data-services/cat/stores/store/${id}/filter`,
+        api_elements_all: ({ key_1: id }) => `api/v1/data-services/cat/stores/store/${id}/filter`,
         authorization: (key: string) => { return `Bearer ${key}` }
     },
     {
         type: StoreType.TYPE_2,
         types: '4900, 6600',
         api_catalyst: 'd2dservices/cluster/allstores?media=json&ui=gui',
-        api_elements: ({ key_1: id, key_2: store_id }) => `d2dservices/cluster/servicesets/${id}/services/cat/stores/${store_id}/items/?media=json&list=this`,
-        authorization: (key: string) => { return `Basic ${btoa(key)}` }
+        api_elements_all: ({ key_1: id, key_2: store_id }) => `d2dservices/cluster/servicesets/${id}/services/cat/stores/${store_id}/items/?media=json&list=this`,
+        authorization: (key: string) => { return `Basic ${btoa(key)}` },
+        cokie_to_dates: ({ time_start, time_end }) => `waypoint_prev=; filter=createdTimeStart=${time_start.replaceAll(':', '%3A')}&createdTimeEnd=${time_end.replaceAll(':', '%3A')}&listAscending=false;`
     }
 ]
 
