@@ -6,6 +6,7 @@ import { GetStoreByName } from "./fetch/FetchCRUDStore"
 import React, { useEffect, useRef, useState } from "react"
 import { Root, createRoot } from "react-dom/client"
 import LoadingBar from "./LoadingBar"
+import { GenerateReport } from "./fetch/FetchStoreCatalyst"
 
 export default function ButtonGenerateReport() {
 
@@ -31,28 +32,29 @@ export default function ButtonGenerateReport() {
 
         /*create object {store,catalyst[]} get name from input */
         for (let j = 0; j < selected_inputs.length; j++) {
-            const [catalyst_name, store_name] = selected_inputs[j].name.split('--')
+            const [catalyst_name, store_name, catalyst_ref] = selected_inputs[j].name.split('--')
+            const parent_row = selected_inputs[j].closest('tr')
+            const dates = parent_row?.querySelectorAll('input[type="datetime-local"]') as NodeListOf<HTMLInputElement> | undefined
             const index = data.findIndex(item => item.store?.name === store_name)
             if (index === -1) {
                 const store = await GetStoreByName(store_name)
-                data.push({ store, catalysts: [catalyst_name] })
+                data.push({ store, catalysts: [catalyst_name + '--' + catalyst_ref], dates })
             }
-            else data[index].catalysts.push(catalyst_name)
+            else data[index].catalysts.push(catalyst_name + '--' + catalyst_ref)
         }
 
         const end = selected_inputs.length
         let start = 1
 
         for (let index = 0; index < data.length; index++) {
-            const { store, catalysts } = data[index];
+            const { store, catalysts, dates } = data[index]
             for (let j = 0; j < catalysts.length; j++) {
                 const prom = (start / end * 100).toFixed(0)
                 setIsLoading(true)
                 setLoading(Number(prom))
                 start++
-                await new Promise(resolve => setTimeout(resolve, 3000));
+                await GenerateReport({ store: store!, catalyst: catalysts[j], dates })
             }
-
         }
 
         setIsLoading(false)
