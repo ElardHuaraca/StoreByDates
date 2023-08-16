@@ -14,7 +14,7 @@ export default function ButtonGenerateReport() {
     const [isLoading, setIsLoading] = useState(false)
     const loadingBarRef = useRef<LoadingBarRef | null>(null)
 
-    let root: Root | null = null
+    let root: Root | undefined = undefined
 
     const btnGenerateReport = async () => {
         const root_conteiner_loading = document.getElementById('loading_container') as HTMLDivElement
@@ -23,7 +23,7 @@ export default function ButtonGenerateReport() {
 
         if (inputs_from_seccond_col?.length === 0) return alert("Es necesario seleccionar algun 'ALMACEN CATALYST'")
 
-        if (root === null) root = createRoot(root_conteiner_loading)
+        root ??= createRoot(root_conteiner_loading)
         if (!root_conteiner_loading?.hasChildNodes()) root.render(<LoadingBar ref={loadingBarRef} />)
 
 
@@ -35,10 +35,11 @@ export default function ButtonGenerateReport() {
             const [catalyst_name, store_name, catalyst_ref] = selected_inputs[j].name.split('--')
             const parent_row = selected_inputs[j].closest('tr')
             const dates = parent_row?.querySelectorAll('input[type="datetime-local"]') as NodeListOf<HTMLInputElement> | undefined
+            const [date_start, date_end] = Array.from(dates!)
             const index = data.findIndex(item => item.store?.name === store_name)
             if (index === -1) {
                 const store = await GetStoreByName(store_name)
-                data.push({ store, catalysts: [catalyst_name + '--' + catalyst_ref], dates })
+                data.push({ store, catalysts: [catalyst_name + '--' + catalyst_ref], dates: [date_start.value, date_end.value] })
             }
             else data[index].catalysts.push(catalyst_name + '--' + catalyst_ref)
         }
