@@ -44,6 +44,10 @@ export default function CRUDModal({ data, textButton, styleButton }: { data?: IS
             col_2.innerText = response.ip!
             col_3.innerText = response.type_store?.name || 'N.A.'
             createRoot(col_4).render(<UDStoreComponent data={response} />)
+
+            /* remove if exist td colspan="4" */
+            const td = document.querySelector('td[colspan="4"]') as HTMLTableCellElement
+            if (td) td.remove()
         } else {
             if (response === undefined) {
                 setIsLoading(false)
