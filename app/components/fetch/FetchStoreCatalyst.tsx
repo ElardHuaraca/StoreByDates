@@ -198,7 +198,6 @@ async function fetchStore49006600ToReport({ store, type, catalyst, dates }: { st
         credentials: 'include'
     }
 
-    console.log(requestInit.headers)
     const [catalyst_name, catalyst_ref] = catalyst.split('--')
     const [catalyst_id, catalyst_store_id] = catalyst_ref.split('-')
 
@@ -207,15 +206,16 @@ async function fetchStore49006600ToReport({ store, type, catalyst, dates }: { st
             if (res.ok) {
                 /* fix json */
                 let text = await res.text()
-                console.log(text)
+                if (text.indexOf('"item":  {') === -1) return []
                 text = text.replace('"items":  {', '"items":  [')
                 text = text.replaceAll('"item":  {', '{')
                 text = text.replace('}\n}\n}', '}\n]\n}')
-                return JSON.parse(text).items ?? []
+                return JSON.parse(text).items
             }
             else return "Ocurrio un error al procesar la informacion del alamacen"
         }).catch(e => {
             console.log(e)
             return `Ocurrio un error inesperado\n ${e}`
         })
+    console.log(warehouses_response.length)
 }
