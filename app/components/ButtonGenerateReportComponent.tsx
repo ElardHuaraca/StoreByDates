@@ -32,9 +32,10 @@ export default function ButtonGenerateReport() {
 
         /*create object {store,catalyst[]} get name from input */
         for (let j = 0; j < selected_inputs.length; j++) {
-            const [catalyst_name, store_name, catalyst_ref] = selected_inputs[j].name.split('--')
             const parent_row = selected_inputs[j].closest('tr')
             const dates = parent_row?.querySelectorAll('input[type="datetime-local"]') as NodeListOf<HTMLInputElement> | undefined
+
+            const [catalyst_name, store_name, catalyst_ref] = selected_inputs[j].name.split('--')
             const [date_start, date_end] = Array.from(dates!)
             const index = data.findIndex(item => item.store?.name === store_name)
             if (index === -1) {
