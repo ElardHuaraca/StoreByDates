@@ -1,6 +1,7 @@
 'use server'
 import { STRUCTURES, StoreConvertByteToRespectiveValue, StoreType } from '@/helpers/StoreSuport'
 import { Structure } from '@/models/Types'
+import { headers } from 'next/dist/client/components/headers'
 
 /* type_function_by_store_type by StoreType return await functions */
 const fetch_information_by_store_type = {
@@ -10,7 +11,7 @@ const fetch_information_by_store_type = {
 
 const fetch_catalyst_by_dates = {
     [StoreType.TYPE_1]: fetStoreLower5650ToReport,
-    [StoreType.TYPE_2]: fetStoreLower5650ToReport,
+    [StoreType.TYPE_2]: fetchStore49006600ToReport,
 }
 
 const storeType = ({ type }: { type: string }) => { return STRUCTURES.find((item) => item.types.includes(type)) ?? false }
@@ -35,12 +36,20 @@ export async function fetchStoresCatDalyst({ data }: { data: IStoreModel }) {
 }
 
 
-export async function GenerateReport({ store, catalyst, dates }: { store: IStoreModel, catalyst: string, dates?: NodeListOf<HTMLInputElement> }) {
+export async function GenerateReport({ store, catalyst, dates }: { store: IStoreModel, catalyst: string, dates?: string[] }) {
     const store_type = storeType({ type: store.type_store!.name })
 
     if (!store_type) return
+    let dates_selected: string[] | undefined = dates
+    if (dates_selected![0] === '' || dates_selected![1] === '') dates_selected = undefined
+    else dates_selected = dates_selected!.map(item => {
+        /* isoString end with 00Z */
+        const date = new Date(item)
+        const format = date.toISOString().slice(0, -5) + 'Z'
+        return format
+    })
 
-    const response = await fetch_catalyst_by_dates[store_type.type]({ store, type: store_type, catalyst, dates: Array.from(dates!) })
+    await fetch_catalyst_by_dates[store_type.type]({ store, type: store_type, catalyst, dates: dates_selected })
 }
 
 async function fetchStoresLower5650({ type, data }: { type: Structure, data: IStoreModel }) {
@@ -104,12 +113,12 @@ async function fetchStoresLower5650({ type, data }: { type: Structure, data: ISt
                     <li key={item.name}>
                         <div className="flex flex-row ps-4">
                             <div className="w-1/5 border">
-                                <label htmlFor={`${data.ip}-${item.name}`} className="h-full w-full flex justify-evenly p-2">
+                                <label htmlFor={`${data.ip}-${item.name}`} className="h-full w-full flex justify-evenly p-2 min-w-[70px]">
                                     <input type="checkbox" name={`${item.name}--${data.name}--${item.id}`} id={`${data.ip}-${item.name}`} className="scale-125" />
                                 </label>
                             </div>
-                            <div className="w-1/2 text-start border">
-                                <p className="p-2 overflow-visible">{item.name}</p>
+                            <div className="w-1/2 text-start border min-w-[215px]">
+                                <p className="p-2 overflow-auto">{item.name}</p>
                             </div>
                             <div className="w-1/5 border">
                                 <p className="p-2">{StoreConvertByteToRespectiveValue({ bytes: item.userBytes })}</p>
@@ -152,12 +161,12 @@ async function fetStores49006600({ type, data }: { type: Structure, data: IStore
                     <li key={item.name}>
                         <div className="flex flex-row ps-4">
                             <div className="w-1/5 border">
-                                <label htmlFor={`${data.ip}-${item.name}`} className="h-full w-full flex justify-evenly p-2">
+                                <label htmlFor={`${data.ip}-${item.name}`} className="h-full w-full flex justify-evenly p-2 min-w-[70px]">
                                     <input type="checkbox" name={`${item.name}--${data.name}--${item.ssid}-${item.storeId}`} id={`${data.ip}-${item.name}`} className="scale-125" />
                                 </label>
                             </div>
-                            <div className="w-1/2 text-start border">
-                                <p className="p-2 overflow-visible">{item.name}</p>
+                            <div className="w-1/2 text-start border min-w-[215px]">
+                                <p className="p-2 overflow-auto">{item.name}</p>
                             </div>
                             <div className="w-1/5 border">
                                 <p className="p-2">{StoreConvertByteToRespectiveValue({ bytes: item.userBytes })}</p>
@@ -173,17 +182,40 @@ async function fetStores49006600({ type, data }: { type: Structure, data: IStore
     )
 }
 
-async function fetStoreLower5650ToReport({ store, type, catalyst, dates }: { store: IStoreModel, type: Structure, catalyst: string, dates: HTMLInputElement[] }) {
+async function fetStoreLower5650ToReport({ store, type, catalyst, dates }: { store: IStoreModel, type: Structure, catalyst: string, dates?: string[] }) {
 
 }
 
-async function fetchStore49006600ToReport({ store, type, catalyst, dates }: { store: IStoreModel, type: Structure, catalyst: string, dates: HTMLInputElement[] }) {
-    const [date_start, date_end] = dates
+async function fetchStore49006600ToReport({ store, type, catalyst, dates }: { store: IStoreModel, type: Structure, catalyst: string, dates?: string[] }) {
     const authorization = type.authorization(`${process.env.USER_STORE}:${process.env.PASSWORD_STORE}`)
     const requestInit: RequestInit = {
         headers: {
             'Authorization': authorization,
+            'Host': store.ip!,
+            'Accept': '*/*',
+            'Cookie': dates === undefined ? 'waypoint_prev=;waypoint_next=mGkFx0VJgfAAAAAAAAAAACpiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAA;filter="";' : type.cokie_to_dates!({ time_start: dates![0], time_end: dates![1] })
         },
+        credentials: 'include'
     }
-    const warehouses = await fetch(`http://${store.ip}/${type.api_elements_all}`)
+
+    const [catalyst_name, catalyst_ref] = catalyst.split('--')
+    const [catalyst_id, catalyst_store_id] = catalyst_ref.split('-')
+
+    const warehouses_response = await fetch(`https://${store.ip}/${type.api_elements_all({ key_1: catalyst_id, key_2: catalyst_store_id })}`, requestInit)
+        .then(async (res) => {
+            if (res.ok) {
+                /* fix json */
+                let text = await res.text()
+                if (text.indexOf('"item":  {') === -1) return []
+                text = text.replace('"items":  {', '"items":  [')
+                text = text.replaceAll('"item":  {', '{')
+                text = text.replace('}\n}\n}', '}\n]\n}')
+                return JSON.parse(text).items
+            }
+            else return "Ocurrio un error al procesar la informacion del alamacen"
+        }).catch(e => {
+            console.log(e)
+            return `Ocurrio un error inesperado\n ${e}`
+        })
+    console.log(warehouses_response.length)
 }
