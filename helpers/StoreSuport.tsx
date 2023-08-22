@@ -13,7 +13,7 @@ export const STRUCTURES: Structure[] = [
         api_auth: 'pml/login/authenticatewithobject',
         api_uuid: 'pml/clustermanagement',
         api_catalyst: 'rest/index/resources',
-        api_elements_all: ({ key_1: id }) => `api/v1/data-services/cat/stores/store/${id}/filter`,
+        api_elements_all: ({ key_1: id }) => `api/v1/data-services/cat/items/store/${id}/filter`,
         authorization: (key: string) => { return `Bearer ${key}` }
     },
     {

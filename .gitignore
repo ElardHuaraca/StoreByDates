@@ -37,6 +37,5 @@ next-env.d.ts
 #flowbite
 public/js/flowbite.min.js
 
-.env
-
 /storage
+.env
