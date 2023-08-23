@@ -1,5 +1,6 @@
 'use server'
 import { STRUCTURES, StoreConvertByteToRespectiveValue, StoreType } from '@/helpers/StoreSuport'
+import { WriteFileXlsx } from '@/helpers/XLSX.helper'
 import { Structure } from '@/models/Types'
 import { headers } from 'next/dist/client/components/headers'
 
@@ -10,7 +11,7 @@ const fetch_information_by_store_type = {
 }
 
 const fetch_catalyst_by_dates = {
-    [StoreType.TYPE_1]: fetStoreLower5650ToReport,
+    [StoreType.TYPE_1]: fetchStoreLower5650ToReport,
     [StoreType.TYPE_2]: fetchStore49006600ToReport,
 }
 
@@ -52,7 +53,7 @@ export async function GenerateReport({ store, catalyst, dates }: { store: IStore
     await fetch_catalyst_by_dates[store_type.type]({ store, type: store_type, catalyst, dates: dates_selected })
 }
 
-async function fetchStoresLower5650({ type, data }: { type: Structure, data: IStoreModel }) {
+const GetToken = async ({ ip, api_auth }: { ip?: string, api_auth?: string }) => {
     const requestAuth: RequestInit = {
         cache: 'no-cache',
         method: 'POST',
@@ -62,10 +63,9 @@ async function fetchStoresLower5650({ type, data }: { type: Structure, data: ISt
             'password': process.env.PASSWORD_STORE,
             'grant_type': 'password'
         }),
-
     }
 
-    const credentials = await fetch(`https://${data.ip}/${type.api_auth}`, requestAuth)
+    const credentials = await fetch(`https://${ip}/${api_auth}`, requestAuth)
         .then(res => {
             if (res.ok) return res.json()
             else return <p className='text-lg'>Error al autenticarse</p>
@@ -73,6 +73,12 @@ async function fetchStoresLower5650({ type, data }: { type: Structure, data: ISt
             console.log(e)
             return <p className='text-lg'>Ocurrio un error inesperado</p>
         })
+
+    return credentials
+}
+
+async function fetchStoresLower5650({ type, data }: { type: Structure, data: IStoreModel }) {
+    const credentials = await GetToken({ ip: data.ip, api_auth: type.api_auth })
 
     if (credentials === undefined || credentials.access_token === undefined) return credentials
 
@@ -138,6 +144,7 @@ async function fetchStoresLower5650({ type, data }: { type: Structure, data: ISt
 async function fetStores49006600({ type, data }: { type: Structure, data: IStoreModel }) {
     const authorization = type.authorization(`${process.env.USER_STORE}:${process.env.PASSWORD_STORE}`)
     const requestInit: RequestInit = {
+        cache: 'no-cache',
         headers: {
             'Authorization': authorization,
         }
@@ -182,15 +189,60 @@ async function fetStores49006600({ type, data }: { type: Structure, data: IStore
     )
 }
 
-async function fetStoreLower5650ToReport({ store, type, catalyst, dates }: { store: IStoreModel, type: Structure, catalyst: string, dates?: string[] }) {
+async function fetchStoreLower5650ToReport({ store, type, catalyst, dates }: { store: IStoreModel, type: Structure, catalyst: string, dates?: string[] }) {
+    const credentials = await GetToken({ ip: store.ip, api_auth: type.api_auth })
 
+    if (credentials === undefined || credentials.access_token === undefined) return credentials
+
+    const requestInit: RequestInit = {
+        cache: 'no-cache',
+        headers: {
+            'Authorization': type.authorization(credentials.access_token),
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify({
+            'filters': dates === undefined ? {} : {
+                'createdDateStart': dates![0],
+                'createdDateEnd': dates![1]
+            }
+        })
+    }
+
+    const [catalyst_name, catalyst_ref] = catalyst.split('--')
+
+    const warehouses_response = await fetch(`https://${store.ip}/${type.api_elements_all({ key_1: catalyst_ref })}`, requestInit)
+        .then(res => {
+            if (res.ok) return res.json()
+            else return "Ocurrio un error al procesar la informacion del alamacen"
+        }).catch(e => {
+            console.log(e)
+            return `Ocurrio un error inesperado\n ${e}`
+        })
+
+    if (typeof warehouses_response !== 'string' && warehouses_response.members.length !== 0) {
+        const data = warehouses_response.members
+        const items = data.map((item: { dataModifiedDate: string | number | Date; name: any; tagList: any; userBytes: any }) => {
+            const date = new Date(item.dataModifiedDate)
+            return {
+                'modified': date.toLocaleDateString() + ' ' + date.toLocaleTimeString(),
+                'element': item.name,
+                'label': item.tagList,
+                'data_size': StoreConvertByteToRespectiveValue({ bytes: item.userBytes })
+            }
+        })
+        const headers = { 'modified': 'Modified', 'element': 'Element', 'label': 'Tag List', 'data_size': 'Data Size', 'ultimate': '' }
+
+        WriteFileXlsx({ catalyst_name: catalyst_name, store_name: store.name, data: items, headers_data: headers })
+    }
 }
 
 async function fetchStore49006600ToReport({ store, type, catalyst, dates }: { store: IStoreModel, type: Structure, catalyst: string, dates?: string[] }) {
-    const authorization = type.authorization(`${process.env.USER_STORE}:${process.env.PASSWORD_STORE}`)
     const requestInit: RequestInit = {
+        cache: 'no-cache',
         headers: {
-            'Authorization': authorization,
+            'Authorization': type.authorization(`${process.env.USER_STORE}:${process.env.PASSWORD_STORE}`),
             'Host': store.ip!,
             'Accept': '*/*',
             'Cookie': dates === undefined ? 'waypoint_prev=;waypoint_next=mGkFx0VJgfAAAAAAAAAAACpiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAA;filter="";' : type.cokie_to_dates!({ time_start: dates![0], time_end: dates![1] })
@@ -217,5 +269,29 @@ async function fetchStore49006600ToReport({ store, type, catalyst, dates }: { st
             console.log(e)
             return `Ocurrio un error inesperado\n ${e}`
         })
-    console.log(warehouses_response.length)
+
+    if (typeof warehouses_response !== 'string' && warehouses_response.length !== 0) {
+        const items = warehouses_response.map((item: {
+            properties: {
+                dataModified: string | number | Date
+                name: any
+                tagList: any
+                dataSize: number,
+                created: string | number | Date
+            }[]
+        }) => {
+            const date_ = new Date(item.properties[0].created)
+            const date = new Date(item.properties[0].dataModified)
+            return {
+                'modified': item.properties[0].name,
+                'element': date_.toLocaleDateString() + ' ' + date_.toLocaleTimeString(),
+                'label': date.toLocaleDateString() + ' ' + date.toLocaleTimeString(),
+                'data_size': item.properties[0].tagList,
+                'ultimate': StoreConvertByteToRespectiveValue({ bytes: item.properties[0].dataSize })
+            }
+        })
+        const headers = { 'modified': 'Catalyst Item Name', 'element': 'Created', 'label': 'Last Modified', 'data_size': 'Tag List', 'ultimate': 'Data Size' }
+
+        WriteFileXlsx({ catalyst_name: catalyst_name, store_name: store.name, data: items, headers_data: headers })
+    }
 }
