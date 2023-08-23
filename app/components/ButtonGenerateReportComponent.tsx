@@ -20,14 +20,13 @@ export default function ButtonGenerateReport() {
         const root_conteiner_loading = document.getElementById('loading_container') as HTMLDivElement
         const table = document.querySelector('table')
         const inputs_from_seccond_col = table?.querySelectorAll('input[type="checkbox"]') as NodeListOf<HTMLInputElement> | undefined
+        const selected_inputs = Array.from(inputs_from_seccond_col!).filter((input) => input.checked)
 
-        if (inputs_from_seccond_col?.length === 0) return alert("Es necesario seleccionar algun 'ALMACEN CATALYST'")
+        if (selected_inputs?.length === 0) return alert("Es necesario seleccionar algun 'ALMACEN CATALYST'")
 
         root ??= createRoot(root_conteiner_loading)
         if (!root_conteiner_loading?.hasChildNodes()) root.render(<LoadingBar ref={loadingBarRef} />)
 
-
-        const selected_inputs = Array.from(inputs_from_seccond_col!).filter((input) => input.checked)
         const data: Data[] = []
 
         /*create object {store,catalyst[]} get name from input */
