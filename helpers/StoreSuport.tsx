@@ -29,6 +29,7 @@ export const STRUCTURES: Structure[] = [
 
 export function StoreConvertByteToRespectiveValue({ bytes }: { bytes: number }) {
     const byte = 1024
+    const kibiByte = byte
     const mebiByte = byte * byte
     const gibiByte = mebiByte * byte
     const tebiByte = gibiByte * byte
@@ -42,6 +43,8 @@ export function StoreConvertByteToRespectiveValue({ bytes }: { bytes: number }) 
         return (bytes / gibiByte).toFixed(1) + 'GiB'
     } else if (bytes >= mebiByte) {
         return (bytes / mebiByte).toFixed(1) + 'MiB'
+    } else if (bytes >= kibiByte) {
+        return (bytes / kibiByte).toFixed(1) + 'KiB'
     } else {
         return bytes + 'B'
     }
