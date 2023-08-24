@@ -2,9 +2,9 @@ import fs from 'fs'
 import { headers } from 'next/dist/client/components/headers'
 import { set_fs, utils, writeFile, readFile } from 'xlsx'
 
-const FILENAME = "reporte_fechas.xlsx"
+export const FILENAME = "reporte_fechas.xlsx"
 const PATH = "storage"
-const PATH_FILE = `${PATH}//${FILENAME}`
+export const PATH_FILE = `${PATH}//${FILENAME}`
 
 /* Set parameters */
 set_fs(fs)
